@@ -9,6 +9,12 @@ var currentHumidity = $("#humidity");
 var currentWindSpeed = $("#wind-speed");
 var currentUvIndex = $("#uv-index");
 var sCity=[];
+// Button functionality
+$("#search-button").on("click",displayWeather);
+$(document).on("click",displayPastSearch);
+$(window).on("load",loadHistory);
+$("#clear-button").on("click",clearHistory);
+
 // checks to see if the city exists 
 function find(c){
     for (var i=0; i<sCity.length; i++){
@@ -147,8 +153,3 @@ function clearHistory(event){
     localStorage.removeItem("cityname");
     document.location.reload();
 }
-
-$("#search-button").on("click",displayWeather);
-$(document).on("click",displayPastSearch);
-$(window).on("load",loadHistory);
-$("#clear-button").on("click",clearHistory);
