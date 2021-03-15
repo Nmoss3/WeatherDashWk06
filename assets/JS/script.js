@@ -106,7 +106,7 @@ function forecast(cityid){
             var humidity= response.list[((i+1)*8)-1].main.humidity;
         
             $("#futDate"+i).html(date);
-            $("#futImg"+i).html("<img src="+iconurl+">");
+            $("#futimg"+i).html("<img src="+iconurl+">");
             $("#futTemp"+i).html(tempF+"&#8457");
             $("#futHumidity"+i).html(humidity+"%");
         }
