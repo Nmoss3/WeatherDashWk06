@@ -44,7 +44,7 @@ function currentWeather(city){
          var weatherIcon = response.weather[0].icon;
          var iconURL="https://openweathermap.org/img/wn/"+weatherIcon +"@2x.png";
 
-         var date=new Date(response.dt*1000).toLocalDateString();
+         var date=new Date(response.dt*1000).toLocaleDateString();
          $(currentCity).html(response.name +"("+date+")" + "<img src="+iconURL+"<");
          //converts current temp data to ferenheit since I did not add that to the fetch URL
 
@@ -81,27 +81,33 @@ function currentWeather(city){
 
      });
 }
-// returns UVIndex response
 function UVIndex(ln,lt){
-    var queryForecast="https://api.openweathermap.org/data/2.5/forecast?id="
-    +cityid
-    +"&appid="
-    +APIKey;
+    var queryUV ="https://api.openweathermap.org/data/2.5/uvi?appid="+ APIKey+"&lat="+lt+"&lon="+ln;
     $.ajax({
-        url:queryForecast,
-        method:"GET"
+            url:queryUV,
+            method:"GET"
+            }).then(function(response){
+                $(currentUvIndex).html(response.value);
+            });
+}
+// display 5 day for current city
+function forecast(cityid){
+    var queryForecast = "https://api.openweathermap.org/data/2.5/forecast?id="+cityid+"&appid="+APIKey;
+    $.ajax({
+        url: queryForecast,
+        method: "GET"
     }).then(function(response){
         for(i=0;i<5;i++){
-            var date=new Date((response.list[((i+1)*8)-1].dtc)*1000).toLocaleDateString();
-            var iCode=response.list[((i+1)*8)-1].weather[0].icon;
-            var iconURL="https://openweathermap.org/img/wn/"+iCode+".png";
-            var tempK=response.list[((i+1)*8)-1].maint.temp;
-            var tempFeren=(((tempK-273.5)*1.80)+32).toFixed(2);
+            var date= new Date((response.list[((i+1)*8)-1].dt)*1000).toLocaleDateString();
+            var iconcode= response.list[((i+1)*8)-1].weather[0].icon;
+            var iconurl="https://openweathermap.org/img/wn/"+iconcode+".png";
+            var tempK= response.list[((i+1)*8)-1].main.temp;
+            var tempF=(((tempK-273.5)*1.80)+32).toFixed(2);
             var humidity= response.list[((i+1)*8)-1].main.humidity;
-
+        
             $("#futDate"+i).html(date);
-            $("#futImg"+i).html("<img src="+iconURL+">");
-            $("#futTemp"+i).html(tempFeren+"&#8457");
+            $("#futImg"+i).html("<img src="+iconurl+">");
+            $("#futTemp"+i).html(tempF+"&#8457");
             $("#futHumidity"+i).html(humidity+"%");
         }
     });
